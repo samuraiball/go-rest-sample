@@ -16,7 +16,7 @@ func performRequest(r http.Handler, method, path string) *httptest.ResponseRecor
 }
 
 func TestGETリクエストでHelloWorldの文字列が返却される(t *testing.T) {
-	//expected:= "Hello, world"
+
 	router := GinMainEngine()
 	w := performRequest(router, "GET", "/")
 
