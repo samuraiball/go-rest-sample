@@ -2,17 +2,17 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
+	helloworld "go-rest-sampl/handler"
 )
 
 func GinMainEngine() *gin.Engine {
-	router := gin.Default()
-	router.GET("/", func(context *gin.Context) {
-		context.JSON(http.StatusOK, gin.H{
-			"hello": "world",
-		})
-	})
-	return router
+	r := gin.Default()
+
+	apiGroup := r.Group("/api")
+
+	helloworld.WorldHandler(apiGroup)
+
+	return r
 }
 
 func main() {
