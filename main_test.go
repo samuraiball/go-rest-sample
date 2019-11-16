@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
@@ -15,15 +14,37 @@ func performRequest(r http.Handler, method, path string) *httptest.ResponseRecor
 	return w
 }
 
-func TestGETリクエストでHelloWorldの文字列が返却される(t *testing.T) {
+func TestPingのPathへアクセスすると文字列を返す(t *testing.T) {
 
 	router := GinMainEngine()
 	w := performRequest(router, "GET", "/ping")
 
-	var res map[string]string
-	err := json.Unmarshal([]byte(w.Body.String()), &res)
-
-	assert.Nil(t, err)
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, "I am alive", res["ping"])
+
+	expected := `{"ping": "I am alive"}`
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.JSONEq(t, expected, w.Body.String())
+}
+
+func TestGetリクエストでTodoListを取得できる(t *testing.T) {
+
+	router := GinMainEngine()
+	w := performRequest(router, "GET", "/todos")
+
+	expected := `
+{
+   "toodo-lists":[
+      {
+         "title":"hoge1",
+         "content":"piyo1"
+      },
+      {
+         "title":"hoge2",
+         "content":"piyo2"
+      }
+   ]
+}`
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.JSONEq(t, expected, w.Body.String())
 }
