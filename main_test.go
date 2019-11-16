@@ -34,7 +34,7 @@ func TestGetリクエストでTodoListを取得できる(t *testing.T) {
 
 	expected := `
 {
-   "toodo-lists":[
+   "todo-list":[
       {
          "title":"hoge1",
          "content":"piyo1"
