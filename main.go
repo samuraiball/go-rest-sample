@@ -10,8 +10,8 @@ func GinMainEngine() *gin.Engine {
 	r := gin.Default()
 
 	apiGroup := r.Group("/api")
-	helloworld.WorldHandler(apiGroup)
-	todolist.TodoRouters(apiGroup)
+	apiGroup.Handle(todolist.TodosHandler())
+	apiGroup.Handle(helloworld.HelloWorldHander())
 
 	return r
 }
