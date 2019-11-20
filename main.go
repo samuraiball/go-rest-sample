@@ -2,16 +2,15 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-rest-sampl/handler/helloworld"
-	"go-rest-sampl/handler/todolist"
+	"go-rest-sampl/handler"
 )
 
 func GinMainEngine() *gin.Engine {
 	r := gin.Default()
 
 	apiGroup := r.Group("/api")
-	apiGroup.Handle(todolist.TodosHandler())
-	apiGroup.Handle(helloworld.HelloWorldHander())
+	apiGroup.Handle(handler.TodosHandler())
+	apiGroup.Handle(handler.HelloWorldHander())
 
 	return r
 }

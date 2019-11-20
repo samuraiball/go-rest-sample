@@ -1,9 +1,14 @@
-package todolist
+package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-rest-sampl/port"
 	"net/http"
 )
+
+type usecase struct {
+	port.TodoPort
+}
 
 func TodosHandler() (method, path string, handler func(c *gin.Context)) {
 	return "GET", "/todos", func(c *gin.Context) {
