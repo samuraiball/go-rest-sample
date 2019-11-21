@@ -1,20 +1,21 @@
 package driver
 
-import "go-rest-sampl/domain"
+import (
+	"github.com/jinzhu/gorm"
+	"go-rest-sampl/domain"
+)
 
-func FindTodo(todoId string) domain.Todo {
+type TodoDriver interface {
+	GetTodo(todoId string)
+}
+
+type TodoDBDriver struct {
+	Conn *gorm.DB
+}
+
+func (db TodoDBDriver) GetTodo(todoId string) domain.Todo {
 	return domain.Todo{
 		Title:   "title",
 		Content: "content",
 	}
-}
-
-func GetTodo(todoId string) {
-
-}
-func GetTodoList(asset, limit string) {
-
-}
-func CreateTodo(todo domain.Todo) {
-
 }

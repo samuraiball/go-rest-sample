@@ -2,22 +2,28 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-rest-sampl/port"
+	"go-rest-sampl/db"
+	"go-rest-sampl/driver"
+	"go-rest-sampl/gateway"
+	"go-rest-sampl/usecase"
 	"net/http"
 )
 
-type usecase struct {
-	port.TodoPort
-}
-
 func TodosHandler() (method, path string, handler func(c *gin.Context)) {
 	return "GET", "/todos", func(c *gin.Context) {
-		todos := []todo{{"hoge1", "piyo1"}, {"hoge2", "piyo2"}}
+
+		todo := usecase.TodoPort{
+			TodoPort: gateway.TodoGateway{
+				TodoGateway: driver.TodoDBDriver{
+					Conn: db.DB(),
+				},
+			},
+		}
+
 		c.JSON(http.StatusOK, gin.H{
-			"todo-list": todos,
+			"todo-list": todo,
 		})
 	}
-
 }
 
 type todo struct {

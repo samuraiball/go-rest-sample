@@ -5,24 +5,11 @@ import (
 	"go-rest-sampl/port"
 )
 
-type useCase struct {
-	port port.TodoPort
+type TodoPort struct {
+	TodoPort port.TodoPort
 }
 
-func GetTodo(todoId string) domain.Todo {
-	return domain.Todo{
-		Title:   "",
-		Content: "",
-	}
-}
-
-func GetTodoList(asset, limit string) []domain.Todo {
-	return nil
-}
-
-func CreateTodo(todo domain.Todo) domain.Todo {
-	return domain.Todo{
-		Title:   "",
-		Content: "",
-	}
+func (port TodoPort) GetTodo(todoId string) domain.Todo {
+	todo := port.TodoPort.GetTodo(todoId)
+	return todo
 }

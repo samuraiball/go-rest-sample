@@ -16,6 +16,7 @@ func GinMainEngine() *gin.Engine {
 }
 
 func main() {
+
 	router := GinMainEngine()
 	if err := router.Run(); err != nil {
 		panic("アプリケーションの起動に失敗しました。")
