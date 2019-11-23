@@ -14,8 +14,8 @@ type TodoDBDriver struct {
 }
 
 func (db TodoDBDriver) GetTodo(todoId string) domain.Todo {
-	return domain.Todo{
-		Title:   "title",
-		Content: "content",
-	}
+	db.Conn.AutoMigrate(&domain.Todo{})
+	var todo domain.Todo
+	db.Conn.First(todo, 1)
+	return todo
 }

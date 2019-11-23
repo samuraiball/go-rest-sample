@@ -8,6 +8,7 @@ import (
 var conn *gorm.DB
 
 func init() {
+
 	db, err := gorm.Open(
 		"postgres",
 		fmt.Printf("host=%s port=%s dbname=%s user%s password=%s sslmode=disable",
@@ -20,7 +21,6 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-
 	conn = db
 }
 
