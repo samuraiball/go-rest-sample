@@ -14,14 +14,14 @@ func TodosHandler() (method, path string, handler func(c *gin.Context)) {
 
 		todo := usecase.TodoPort{
 			TodoPort: gateway.TodoGateway{
-				TodoGateway: driver.TodoDBDriver{
+				TodoDriver: driver.TodoDBDriver{
 					Conn: db.DB(),
 				},
 			},
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"todo-list": todo,
+			"todo-list": todo.GetTodo(""),
 		})
 	}
 }

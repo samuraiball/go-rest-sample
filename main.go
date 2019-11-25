@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-rest-sampl/db"
+	"go-rest-sampl/driver"
 	"go-rest-sampl/handler"
 )
 
@@ -16,9 +18,24 @@ func GinMainEngine() *gin.Engine {
 }
 
 func main() {
-
 	router := GinMainEngine()
+	db.DB().LogMode(true)
+
+	initDb()
+
+	defer db.CloseDB()
+
+	db.DB().Create(driver.TodoModel{
+		Title:   "title",
+		Content: "content",
+	})
+
 	if err := router.Run(); err != nil {
 		panic("アプリケーションの起動に失敗しました。")
 	}
+}
+
+func initDb() {
+	db.DB().AutoMigrate(&driver.TodoModel{})
+
 }

@@ -6,9 +6,9 @@ import (
 )
 
 type TodoGateway struct {
-	TodoGateway driver.TodoDBDriver
+	TodoDriver driver.TodoDBDriver
 }
 
 func (d TodoGateway) GetTodo(todoId string) domain.Todo {
-	return d.GetTodo(todoId)
+	return d.TodoDriver.GetTodo(todoId)
 }

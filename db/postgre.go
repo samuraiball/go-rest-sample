@@ -1,22 +1,20 @@
 package db
 
 import (
-	"fmt"
 	"github.com/jinzhu/gorm"
+	//	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 var conn *gorm.DB
 
 func init() {
+	/*
+		db, err := gorm.Open(
+			"postgres",
+			"host=127.0.0.1 port=5432 user=todoUser dbname=todo_db password=password")*/
 
-	db, err := gorm.Open(
-		"postgres",
-		fmt.Printf("host=%s port=%s dbname=%s user%s password=%s sslmode=disable",
-			"localhost",
-			"5432",
-			"todoDb",
-			"password",
-			"dotoUser"))
+	db, err := gorm.Open("sqlite3", "/tmp/gorm.db")
 
 	if err != nil {
 		panic(err)
