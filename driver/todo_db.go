@@ -16,7 +16,7 @@ type TodoDBDriver struct {
 func (db TodoDBDriver) GetTodo(todoId string) domain.Todo {
 	var todoModel TodoModel
 
-	db.Conn.Find(&todoModel)
+	db.Conn.First(&todoModel)
 
 	return domain.Todo{
 		Title:   todoModel.Title,

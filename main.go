@@ -25,7 +25,7 @@ func main() {
 
 	defer db.CloseDB()
 
-	db.DB().Create(driver.TodoModel{
+	db.DB().Create(&driver.TodoModel{
 		Title:   "title",
 		Content: "content",
 	})
@@ -36,6 +36,6 @@ func main() {
 }
 
 func initDb() {
+	db.DB().DropTableIfExists()
 	db.DB().AutoMigrate(&driver.TodoModel{})
-
 }
