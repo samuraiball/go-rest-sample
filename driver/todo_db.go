@@ -19,6 +19,7 @@ func (db TodoDBDriver) GetTodo(todoId string) domain.Todo {
 	db.Conn.First(&todoModel)
 
 	return domain.Todo{
+		TodoId:  todoModel.Id,
 		Title:   todoModel.Title,
 		Content: todoModel.Content,
 	}

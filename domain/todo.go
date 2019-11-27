@@ -1,9 +1,7 @@
 package domain
 
-import "time"
-
 type Todo struct {
-	Title       string
-	Content     string
-	createdDate time.Time
+	TodoId  int64  `json:"todo_id"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
 }

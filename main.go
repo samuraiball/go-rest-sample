@@ -25,11 +25,6 @@ func main() {
 
 	defer db.CloseDB()
 
-	db.DB().Create(&driver.TodoModel{
-		Title:   "title",
-		Content: "content",
-	})
-
 	if err := router.Run(); err != nil {
 		panic("アプリケーションの起動に失敗しました。")
 	}

@@ -2,8 +2,11 @@ package main
 
 import (
 	"github.com/stretchr/testify/assert"
+	"go-rest-sampl/db"
+	"go-rest-sampl/driver"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 )
 
@@ -22,28 +25,36 @@ func TestPingのPathへアクセスすると文字列を返す(t *testing.T) {
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	expected := `{"ping": "I am alive"}`
-
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.JSONEq(t, expected, w.Body.String())
 }
 
+func TestMain(m *testing.M) {
+	db.DB().DropTableIfExists(&driver.TodoModel{})
+	db.DB().AutoMigrate(&driver.TodoModel{})
+	db.DB().Create(&driver.TodoModel{
+		Title:   "title1",
+		Content: "content1",
+	})
+
+	code := m.Run()
+	os.Exit(code)
+}
+
 func TestGetリクエストでTodoListを取得できる(t *testing.T) {
 
+	//todoId := "1"
 	router := GinMainEngine()
 	w := performRequest(router, "GET", "/todos")
 
 	expected := `
 {
-   "todo-list":[
+   "todo-list":
       {
-         "title":"hoge1",
-         "content":"piyo1"
-      },
-      {
-         "title":"hoge2",
-         "content":"piyo2"
+         "todo_id": 1,
+         "title":"title1",
+         "content":"content1"
       }
-   ]
 }`
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.JSONEq(t, expected, w.Body.String())
