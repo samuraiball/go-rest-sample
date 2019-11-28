@@ -30,11 +30,17 @@ func TestPingのPathへアクセスすると文字列を返す(t *testing.T) {
 }
 
 func TestMain(m *testing.M) {
+
 	db.DB().DropTableIfExists(&driver.TodoModel{})
 	db.DB().AutoMigrate(&driver.TodoModel{})
+
 	db.DB().Create(&driver.TodoModel{
 		Title:   "title1",
 		Content: "content1",
+	})
+	db.DB().Create(&driver.TodoModel{
+		Title:   "title2",
+		Content: "content2",
 	})
 
 	code := m.Run()
@@ -43,19 +49,20 @@ func TestMain(m *testing.M) {
 
 func TestGetリクエストでTodoListを取得できる(t *testing.T) {
 
-	//todoId := "1"
+	todoId := "2"
 	router := GinMainEngine()
-	w := performRequest(router, "GET", "/todos")
+	w := performRequest(router, "GET", "/todo/"+todoId)
 
 	expected := `
 {
    "todo-list":
       {
-         "todo_id": 1,
-         "title":"title1",
-         "content":"content1"
+         "todo_id": 2,
+         "title":"title2",
+         "content":"content2"
       }
 }`
+
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.JSONEq(t, expected, w.Body.String())
 }

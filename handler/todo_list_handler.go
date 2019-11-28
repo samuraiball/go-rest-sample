@@ -10,7 +10,7 @@ import (
 )
 
 func TodosHandler() (method, path string, handler func(c *gin.Context)) {
-	return "GET", "/todos", func(c *gin.Context) {
+	return "GET", "/todo/:id", func(c *gin.Context) {
 
 		todo := usecase.TodoPort{
 			TodoPort: gateway.TodoGateway{
@@ -21,7 +21,7 @@ func TodosHandler() (method, path string, handler func(c *gin.Context)) {
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"todo-list": todo.GetTodo(""),
+			"todo-list": todo.GetTodo(c.Param("id")),
 		})
 	}
 }
