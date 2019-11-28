@@ -11,8 +11,9 @@ func GinMainEngine() *gin.Engine {
 	r := gin.Default()
 
 	apiGroup := r.Group("/api")
-	apiGroup.Handle(handler.TodosHandler())
-	apiGroup.Handle(handler.HelloWorldHander())
+	apiGroup.Handle(handler.HelthCheckHandler())
+	apiGroup.Handle(handler.GetTodoHandler())
+	apiGroup.Handle(handler.PostTodoHandler())
 
 	return r
 }

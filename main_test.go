@@ -78,7 +78,7 @@ func TestPOSTリクエストでTodoを登録できるようにする(t *testing.
 	actual := &driver.TodoModel{}
 	db.DB().Find(actual).Where("posted_todo")
 
-	expected := driver.TodoModel{
+	expected := &driver.TodoModel{
 		Id:      3,
 		Title:   "posted_todo",
 		Content: "this is a posted todo task",

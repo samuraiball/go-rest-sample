@@ -13,7 +13,7 @@ type TodoDBDriver struct {
 	Conn *gorm.DB
 }
 
-func (db TodoDBDriver) GetTodo(todoId string) domain.Todo {
+func (db TodoDBDriver) FindTodoById(todoId string) domain.Todo {
 	var todoModel TodoModel
 
 	db.Conn.First(&todoModel, todoId)
@@ -23,6 +23,15 @@ func (db TodoDBDriver) GetTodo(todoId string) domain.Todo {
 		Title:   todoModel.Title,
 		Content: todoModel.Content,
 	}
+}
+
+func (db TodoDBDriver) CreateTodo(todo domain.Todo) {
+
+	newTodo := TodoModel{
+		Title:   todo.Title,
+		Content: todo.Content,
+	}
+	db.Conn.Create(&newTodo)
 }
 
 type TodoModel struct {

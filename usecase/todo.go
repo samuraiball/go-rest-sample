@@ -9,7 +9,10 @@ type TodoPort struct {
 	TodoPort port.TodoPort
 }
 
-func (port TodoPort) GetTodo(todoId string) domain.Todo {
-	todo := port.TodoPort.GetTodo(todoId)
-	return todo
+func (port TodoPort) FindTodoById(todoId string) domain.Todo {
+	return port.TodoPort.FindTodoById(todoId)
+}
+
+func (port TodoPort) CreateTodo(todo domain.Todo) {
+	port.TodoPort.CreateTodo(todo)
 }
