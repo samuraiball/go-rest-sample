@@ -13,6 +13,6 @@ func (d TodoGateway) FindTodoById(todoId string) domain.Todo {
 	return d.TodoDriver.FindTodoById(todoId)
 }
 
-func (d TodoGateway) CreateTodo(todo domain.Todo) {
-	d.TodoDriver.CreateTodo(todo)
+func (d TodoGateway) CreateTodo(todo domain.Todo) domain.Todo {
+	return d.TodoDriver.CreateTodo(todo)
 }

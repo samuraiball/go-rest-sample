@@ -25,13 +25,20 @@ func (db TodoDBDriver) FindTodoById(todoId string) domain.Todo {
 	}
 }
 
-func (db TodoDBDriver) CreateTodo(todo domain.Todo) {
+func (db TodoDBDriver) CreateTodo(todo domain.Todo) domain.Todo {
 
 	newTodo := TodoModel{
 		Title:   todo.Title,
 		Content: todo.Content,
 	}
 	db.Conn.Create(&newTodo)
+
+	return domain.Todo{
+		TodoId:  newTodo.Id,
+		Title:   newTodo.Title,
+		Content: newTodo.Content,
+	}
+
 }
 
 type TodoModel struct {

@@ -21,9 +21,7 @@ func GetTodoHandler() (method, path string, handler func(c *gin.Context)) {
 			},
 		}
 
-		c.JSON(http.StatusOK, gin.H{
-			"todo-list": todo.FindTodoById(c.Param("id")),
-		})
+		c.JSON(http.StatusOK, gin.H{"todo-list": todo.FindTodoById(c.Param("id"))})
 	}
 }
 
@@ -45,8 +43,6 @@ func PostTodoHandler() (method, path string, handler func(c *gin.Context)) {
 			panic(err)
 		}
 
-		todo.CreateTodo(newTodo)
-
-		c.JSON(http.StatusCreated, nil)
+		c.JSON(http.StatusCreated, gin.H{"todo-list": todo.CreateTodo(newTodo)})
 	}
 }

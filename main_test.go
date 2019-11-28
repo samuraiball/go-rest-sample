@@ -62,7 +62,7 @@ func TestGetリクエストでTodoListを取得できる(t *testing.T) {
 	assert.JSONEq(t, expected, w.Body.String())
 }
 
-func TestPOSTリクエストでTodoを登録できるようにする(t *testing.T) {
+func TestPOSTリクエストでTodoを登録できる(t *testing.T) {
 
 	router := GinMainEngine()
 
@@ -73,19 +73,31 @@ func TestPOSTリクエストでTodoを登録できるようにする(t *testing.
 }
 `
 
-	w := performRequest(router, "POST", "/todo", strings.NewReader(requestBody))
-
-	actual := &driver.TodoModel{}
-	db.DB().Find(actual).Where("posted_todo")
-
-	expected := &driver.TodoModel{
+	expectedDbInsert := &driver.TodoModel{
 		Id:      3,
 		Title:   "posted_todo",
 		Content: "this is a posted todo task",
 	}
 
+	expectedResponse := `
+{
+   "todo-list":
+      {
+         "todo_id": 3,
+         "title":"posted_todo",
+         "content":"this is a posted todo task"
+      }
+}
+`
+
+	w := performRequest(router, "POST", "/todo", strings.NewReader(requestBody))
+
+	actualDbInsert := &driver.TodoModel{}
+	db.DB().Find(actualDbInsert).Where("title=?", "posted_todo")
+
+	assert.Equal(t, expectedDbInsert, actualDbInsert)
 	assert.Equal(t, http.StatusCreated, w.Code)
-	assert.Equal(t, expected, actual)
+	assert.JSONEq(t, expectedResponse, w.Body.String())
 }
 
 func performRequest(r http.Handler, method, path string, body io.Reader) *httptest.ResponseRecorder {
