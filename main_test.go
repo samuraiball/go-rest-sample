@@ -4,30 +4,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"go-rest-sampl/db"
 	"go-rest-sampl/driver"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"strings"
 	"testing"
 )
-
-func performRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
-	req, _ := http.NewRequest(method, "http://localhost:8080/api"+path, nil)
-	w := httptest.NewRecorder()
-	r.ServeHTTP(w, req)
-	return w
-}
-
-func TestPingのPathへアクセスすると文字列を返す(t *testing.T) {
-
-	router := GinMainEngine()
-	w := performRequest(router, "GET", "/ping")
-
-	assert.Equal(t, http.StatusOK, w.Code)
-
-	expected := `{"ping": "I am alive"}`
-	assert.Equal(t, http.StatusOK, w.Code)
-	assert.JSONEq(t, expected, w.Body.String())
-}
 
 func TestMain(m *testing.M) {
 
@@ -47,11 +30,23 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
+func TestPingのPathへアクセスすると文字列を返す(t *testing.T) {
+
+	router := GinMainEngine()
+	w := performRequest(router, "GET", "/ping", nil)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	expected := `{"ping": "I am alive"}`
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.JSONEq(t, expected, w.Body.String())
+}
+
 func TestGetリクエストでTodoListを取得できる(t *testing.T) {
 
 	todoId := "2"
 	router := GinMainEngine()
-	w := performRequest(router, "GET", "/todo/"+todoId)
+	w := performRequest(router, "GET", "/todo/"+todoId, nil)
 
 	expected := `
 {
@@ -65,4 +60,37 @@ func TestGetリクエストでTodoListを取得できる(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.JSONEq(t, expected, w.Body.String())
+}
+
+func TestPOSTリクエストでTodoを登録できるようにする(t *testing.T) {
+
+	router := GinMainEngine()
+
+	requestBody := `
+{
+   "title":"posted_todo", 
+   "content":"this is a posted todo task"
+}
+`
+
+	w := performRequest(router, "POST", "/todo", strings.NewReader(requestBody))
+
+	actual := &driver.TodoModel{}
+	db.DB().Find(actual).Where("posted_todo")
+
+	expected := driver.TodoModel{
+		Id:      3,
+		Title:   "posted_todo",
+		Content: "this is a posted todo task",
+	}
+
+	assert.Equal(t, http.StatusCreated, w.Code)
+	assert.Equal(t, expected, actual)
+}
+
+func performRequest(r http.Handler, method, path string, body io.Reader) *httptest.ResponseRecorder {
+	req, _ := http.NewRequest(method, "http://localhost:8080/api"+path, body)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	return w
 }
