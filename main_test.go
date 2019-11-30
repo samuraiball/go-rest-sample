@@ -100,6 +100,42 @@ func TestPOSTリクエストでTodoを登録できる(t *testing.T) {
 	assert.JSONEq(t, expectedResponse, w.Body.String())
 }
 
+func TestPutリクエストでTodoを更新できる(t *testing.T) {
+
+	router := GinMainEngine()
+
+	requestBody := `
+{
+   "title":"title1", 
+   "content":"this content is updated"
+}
+`
+	expectedDbUpdate := &driver.TodoModel{
+		Id:      1,
+		Title:   "title1",
+		Content: "this content is updated",
+	}
+
+	expectedResponse := `
+{
+   "todo-list":
+      {
+          "todo_id": 1,
+         "title":"title1",
+         "content":"this content is updated"
+      }
+}
+`
+	w := performRequest(router, "POST", "/todo", strings.NewReader(requestBody))
+
+	actualDbUpdate := &driver.TodoModel{}
+	db.DB().First(actualDbUpdate, 1)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, expectedDbUpdate, actualDbUpdate)
+	assert.JSONEq(t, expectedResponse, w.Body.String())
+}
+
 func performRequest(r http.Handler, method, path string, body io.Reader) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(method, "http://localhost:8080/api"+path, body)
 	w := httptest.NewRecorder()
