@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
 	"go-rest-sampl/db"
 	"go-rest-sampl/driver"
@@ -134,6 +135,20 @@ func TestPutリクエストでTodoを更新できる(t *testing.T) {
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, expectedDbUpdate, actualDbUpdate)
 	assert.JSONEq(t, expectedResponse, w.Body.String())
+}
+
+func TestDeleteリクエストでTodoを削除することができる(t *testing.T) {
+
+	todoId := "1"
+	router := GinMainEngine()
+	w := performRequest(router, "DELETE", "/todo/"+todoId, nil)
+
+	var deletedTodo driver.TodoModel
+	if !gorm.DB.First(&deletedTodo, todoId).RecordNotFound() {
+		assert.Fail(t, "Record not deleted")
+	}
+
+	assert.Equal(t, http.StatusNoContent, w.Code)
 }
 
 func performRequest(r http.Handler, method, path string, body io.Reader) *httptest.ResponseRecorder {
