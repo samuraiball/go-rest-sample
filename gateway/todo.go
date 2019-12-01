@@ -16,3 +16,7 @@ func (d TodoGateway) FindTodoById(todoId string) domain.Todo {
 func (d TodoGateway) CreateTodo(todo domain.Todo) domain.Todo {
 	return d.TodoDriver.CreateTodo(todo)
 }
+
+func (d TodoGateway) UpdateTodo(todoId int64, todo domain.Todo) domain.Todo {
+	return d.TodoDriver.UpdateTodo(todoId, todo)
+}

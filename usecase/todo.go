@@ -16,3 +16,7 @@ func (port TodoPort) FindTodoById(todoId string) domain.Todo {
 func (port TodoPort) CreateTodo(todo domain.Todo) domain.Todo {
 	return port.TodoPort.CreateTodo(todo)
 }
+
+func (port TodoPort) UpdateTodo(todoId int64, todo domain.Todo) domain.Todo {
+	return port.TodoPort.UpdateTodo(todoId, todo)
+}

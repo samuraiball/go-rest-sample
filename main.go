@@ -14,6 +14,7 @@ func GinMainEngine() *gin.Engine {
 	apiGroup.Handle(handler.HelthCheckHandler())
 	apiGroup.Handle(handler.GetTodoHandler())
 	apiGroup.Handle(handler.PostTodoHandler())
+	apiGroup.Handle(handler.PutTodoHandler())
 
 	return r
 }

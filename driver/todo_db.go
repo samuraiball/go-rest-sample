@@ -41,6 +41,22 @@ func (db TodoDBDriver) CreateTodo(todo domain.Todo) domain.Todo {
 
 }
 
+func (db TodoDBDriver) UpdateTodo(todoId int64, todo domain.Todo) domain.Todo {
+
+	var updateTodo TodoModel
+	db.Conn.First(&updateTodo, todoId)
+	updateTodo.Title = todo.Title
+	updateTodo.Content = todo.Content
+
+	db.Conn.Save(updateTodo)
+
+	return domain.Todo{
+		TodoId:  updateTodo.Id,
+		Title:   updateTodo.Title,
+		Content: updateTodo.Content,
+	}
+}
+
 type TodoModel struct {
 	Id      int64  `gorm:"primary_key"`
 	Title   string `gorm:"title"`

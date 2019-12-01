@@ -106,27 +106,27 @@ func TestPutリクエストでTodoを更新できる(t *testing.T) {
 
 	requestBody := `
 {
-   "title":"title1", 
+   "title":"this title is updated", 
    "content":"this content is updated"
 }
 `
 	expectedDbUpdate := &driver.TodoModel{
 		Id:      1,
-		Title:   "title1",
+		Title:   "this title is updated",
 		Content: "this content is updated",
 	}
 
 	expectedResponse := `
 {
-   "todo-list":
-      {
-          "todo_id": 1,
-         "title":"title1",
-         "content":"this content is updated"
-      }
+  "todo-list":
+    {
+      "todo_id": 1,
+      "title":"this title is updated",
+      "content":"this content is updated"
+    }
 }
 `
-	w := performRequest(router, "POST", "/todo", strings.NewReader(requestBody))
+	w := performRequest(router, "PUT", "/todo/"+"1", strings.NewReader(requestBody))
 
 	actualDbUpdate := &driver.TodoModel{}
 	db.DB().First(actualDbUpdate, 1)
