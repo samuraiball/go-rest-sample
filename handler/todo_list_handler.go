@@ -71,3 +71,23 @@ func PutTodoHandler() (method, path string, handler func(c *gin.Context)) {
 		c.JSON(http.StatusOK, gin.H{"todo-list": todo.UpdateTodo(targetId, updateTodo)})
 	}
 }
+
+func DeleteTodoHandler() (method, path string, handler func(c *gin.Context)) {
+	return "DELETE", "todo/:id", func(c *gin.Context) {
+
+		todo := usecase.TodoPort{
+			TodoPort: gateway.TodoGateway{
+				TodoDriver: driver.TodoDBDriver{
+					Conn: db.DB(),
+				},
+			},
+		}
+
+		// FIXME: error handling
+		targetId, _ := strconv.ParseInt(c.Param("id"), 10, 64)
+
+		todo.DeleteTodo(targetId)
+
+		c.Writer.WriteHeader(http.StatusNoContent)
+	}
+}

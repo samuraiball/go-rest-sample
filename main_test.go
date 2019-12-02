@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
 	"go-rest-sampl/db"
 	"go-rest-sampl/driver"
@@ -96,8 +95,9 @@ func TestPOSTリクエストでTodoを登録できる(t *testing.T) {
 	actualDbInsert := &driver.TodoModel{}
 	db.DB().Find(actualDbInsert).Where("title=?", "posted_todo")
 
-	assert.Equal(t, expectedDbInsert, actualDbInsert)
 	assert.Equal(t, http.StatusCreated, w.Code)
+	assert.Equal(t, expectedDbInsert.Title, actualDbInsert.Title)
+	assert.Equal(t, expectedDbInsert.Content, actualDbInsert.Content)
 	assert.JSONEq(t, expectedResponse, w.Body.String())
 }
 
@@ -133,7 +133,8 @@ func TestPutリクエストでTodoを更新できる(t *testing.T) {
 	db.DB().First(actualDbUpdate, 1)
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, expectedDbUpdate, actualDbUpdate)
+	assert.Equal(t, expectedDbUpdate.Title, actualDbUpdate.Title)
+	assert.Equal(t, expectedDbUpdate.Content, actualDbUpdate.Content)
 	assert.JSONEq(t, expectedResponse, w.Body.String())
 }
 
@@ -143,8 +144,9 @@ func TestDeleteリクエストでTodoを削除することができる(t *testin
 	router := GinMainEngine()
 	w := performRequest(router, "DELETE", "/todo/"+todoId, nil)
 
-	var deletedTodo driver.TodoModel
-	if !gorm.DB.First(&deletedTodo, todoId).RecordNotFound() {
+	deletedTodo := &driver.TodoModel{}
+	deletedTOdo := db.DB().First(deletedTodo, todoId)
+	if !deletedTOdo.RecordNotFound() {
 		assert.Fail(t, "Record not deleted")
 	}
 

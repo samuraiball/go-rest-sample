@@ -3,6 +3,7 @@ package driver
 import (
 	"github.com/jinzhu/gorm"
 	"go-rest-sampl/domain"
+	"time"
 )
 
 type TodoDriver interface {
@@ -57,8 +58,15 @@ func (db TodoDBDriver) UpdateTodo(todoId int64, todo domain.Todo) domain.Todo {
 	}
 }
 
+func (db TodoDBDriver) DeleteTodo(todoId int64) {
+	db.Conn.Delete(&TodoModel{Id: todoId})
+}
+
 type TodoModel struct {
-	Id      int64  `gorm:"primary_key"`
-	Title   string `gorm:"title"`
-	Content string `gorm:"content"`
+	Id        int64  `gorm:"primary_key"`
+	Title     string `gorm:"title"`
+	Content   string `gorm:"content"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time `sql:"index"`
 }

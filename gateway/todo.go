@@ -20,3 +20,7 @@ func (d TodoGateway) CreateTodo(todo domain.Todo) domain.Todo {
 func (d TodoGateway) UpdateTodo(todoId int64, todo domain.Todo) domain.Todo {
 	return d.TodoDriver.UpdateTodo(todoId, todo)
 }
+
+func (d TodoGateway) DeleteTodo(todoId int64) {
+	d.TodoDriver.DeleteTodo(todoId)
+}

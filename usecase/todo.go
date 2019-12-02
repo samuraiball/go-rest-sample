@@ -20,3 +20,7 @@ func (port TodoPort) CreateTodo(todo domain.Todo) domain.Todo {
 func (port TodoPort) UpdateTodo(todoId int64, todo domain.Todo) domain.Todo {
 	return port.TodoPort.UpdateTodo(todoId, todo)
 }
+
+func (port TodoPort) DeleteTodo(todoId int64) {
+	port.TodoPort.DeleteTodo(todoId)
+}
