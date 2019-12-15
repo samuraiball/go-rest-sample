@@ -10,29 +10,12 @@ import (
 	"log"
 )
 
-func GinMainEngine() *gin.Engine {
-	r := gin.Default()
-
-	apiGroup := r.Group("/api")
-	apiGroup.Use(midleware.LogMiddleware())
-	apiGroup.Handle(handler.HelthCheckHandler())
-	apiGroup.Handle(handler.GetTodoHandler())
-	apiGroup.Handle(handler.PostTodoHandler())
-	apiGroup.Handle(handler.PutTodoHandler())
-	apiGroup.Handle(handler.DeleteTodoHandler())
-
-	return r
-}
-
 func main() {
 
 	logSetting()
 
 	router := GinMainEngine()
-
-	db.DB().LogMode(true)
 	initDb()
-
 	defer db.CloseDB()
 
 	if err := router.Run(); err != nil {
@@ -53,4 +36,20 @@ func logSetting() {
 		Flag:   log.Ldate | log.Ltime | log.Lshortfile,
 	})
 	colog.Register()
+}
+
+func GinMainEngine() *gin.Engine {
+	r := gin.Default()
+
+	apiGroup := r.Group("/api")
+	apiGroup.Use(midleware.FooMiddleware())
+	apiGroup.Use(midleware.BarMiddleware())
+
+	apiGroup.Handle(handler.HelthCheckHandler())
+	apiGroup.Handle(handler.GetTodoHandler())
+	apiGroup.Handle(handler.PostTodoHandler())
+	apiGroup.Handle(handler.PutTodoHandler())
+	apiGroup.Handle(handler.DeleteTodoHandler())
+
+	return r
 }

@@ -5,9 +5,22 @@ import (
 	"log"
 )
 
-func LogMiddleware() gin.HandlerFunc {
+func FooMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		header := c.GetHeader("User-Agent")
-		log.Printf("info: there is an accsecc : " + header)
+		log.Printf("info: fooBefore")
+
+		c.Next()
+
+		log.Printf("info: fooAfter")
+	}
+}
+
+func BarMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		log.Printf("info: barBefore")
+
+		c.Next()
+
+		log.Printf("info: barAfter")
 	}
 }
