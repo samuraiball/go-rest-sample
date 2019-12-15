@@ -3,6 +3,7 @@ module go-rest-sampl
 go 1.13
 
 require (
+	github.com/comail/colog v0.0.0-20160416085026-fba8e7b1f46c
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.4.0
 	github.com/golang/protobuf v1.3.2 // indirect
